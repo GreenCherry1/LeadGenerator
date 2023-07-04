@@ -8,6 +8,8 @@ import requests
 import json
 
 class Scraper:
+    def __init__(self):
+        return self.driver = webdriver.Chrome()
     def scroll(self, driver):
         """
         Perform scrolling action on the web page.
