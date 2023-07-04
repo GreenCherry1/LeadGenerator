@@ -10,6 +10,7 @@ import json
 class Scraper:
     def __init__(self):
         return self.driver = webdriver.Chrome()
+	
     def scroll(self, driver):
         """
         Perform scrolling action on the web page.
@@ -119,10 +120,7 @@ class Scraper:
         driver.implicitly_wait(10)
         driver.switch_to.window(driver.window_handles[-1])
         self.log_in_facebook(driver)
-        info = driver.find_elements(
-            By.XPATH,
-            "//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xzsf02u x1yc453h']"
-        )
+        info = driver.find_elements(By.XPATH,"//span[@class='x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xzsf02u x1yc453h']")
         for i in info:
             text = i.text
             if '@' in text:
@@ -130,21 +128,7 @@ class Scraper:
                 return text
         self.close_tab(driver)
         return ''
-
-    def check_links(self, driver, used_links):
-        """
-        Check if there are more links to be processed.
-
-        Args:
-            driver (WebDriver): The Selenium WebDriver instance.
-            used_links (int): The number of links already processed.
-
-        Returns:
-            bool: True if there are more links, False otherwise.
-        """
-        return len(driver.find_elements(By.CLASS_NAME, 'hfpxzc')) > used_links
-
-    def run_scraper(self, Search, Least_Leads):
+    def run_scraper(self, search, Least_Leads):
         """
         Run the web scraper.
 
@@ -164,8 +148,7 @@ class Scraper:
         while Full_Leads < Least_Leads:
             self.scroll(driver)
             used_links += len(links)
-            WebDriverWait(driver, timeout=10).until(
-                lambda d: len(d.find_elements(By.CLASS_NAME, 'hfpxzc')) > used_links
+            WebDriverWait(driver, timeout=10).until(lambda d: len(d.find_elements(By.CLASS_NAME, 'hfpxzc')) > used_links
             )
             links = [i.get_attribute('href') for i in driver.find_elements(By.CLASS_NAME, 'hfpxzc')[used_links:]]
             if not len(links):
@@ -175,7 +158,6 @@ class Scraper:
                 driver.execute_script("window.open('%s', '_blank')" % i)
                 driver.implicitly_wait(10)
                 driver.switch_to.window(driver.window_handles[-1])
-                add = [x.text for x in driver.find_elements(By.CLASS_NAME, 'DkEaL')]
                 pictures_buttons = driver.find_elements(By.CLASS_NAME, 'CsEnBe')
                 pictures_aria_label = [x.get_attribute("aria-label") for x in pictures_buttons]
                 websites = list(set([x.get_attribute('href') for x in pictures_buttons if x.tag_name == 'a' and x.get_attribute('aria-label') != 'Claim this business']))
