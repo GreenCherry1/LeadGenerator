@@ -51,7 +51,8 @@ class Scraper:
         for page in pages:
             try:
                 code = requests.get(page, headers=headers).status_code
-            except:
+            except Exception as ex_:
+                print(ex)
                 continue
             if code != 200:
                 continue
@@ -68,7 +69,8 @@ class Scraper:
                             out['email'] = email
                             if HasPhone:
                                 return out
-                except:
+                except Exception as ex_:
+                    print(ex_)
                     continue
                 try:
                     if not HasPhone and 'tel' in i.get_attribute("href"):
@@ -81,8 +83,8 @@ class Scraper:
                         if HasPhone or out['phone']:
                             self.close_tab(driver)
                             return out
-                except:
-                    1 / 1
+                except Exception as ex_:
+                    print(ex_)
             self.close_tab(driver)
         return out
 
